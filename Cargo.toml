@@ -1,0 +1,6 @@
+[workspace]
+members = ['aurora-cli']
+
+[profile.release]
+lto = true
+strip = true
