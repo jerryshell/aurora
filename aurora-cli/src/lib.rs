@@ -17,9 +17,13 @@ fn extract_audio(video_filename: &str) -> String {
     println!("video_extract_audio_filename: {video_extract_audio_filename}");
 
     let extract_audio_cmd_str = if cfg!(target_os = "windows") {
-        format!("ffmpeg.exe -y -i {video_filename} -vn -acodec copy {video_extract_audio_filename}")
+        format!(
+            r"ffmpeg\ffmpeg.exe -y -i {video_filename} -vn -acodec copy {video_extract_audio_filename}"
+        )
     } else {
-        format!("ffmpeg -y -i {video_filename} -vn -acodec copy {video_extract_audio_filename}")
+        format!(
+            r"ffmpeg/ffmpeg -y -i {video_filename} -vn -acodec copy {video_extract_audio_filename}"
+        )
     };
     println!("extract_audio_cmd_str: {extract_audio_cmd_str}");
 
@@ -40,9 +44,9 @@ fn video_frames_dir_mkdir(video_filename: &str) -> String {
 
 fn decode_frames(video_filename: &str, video_frames_dir_name: &str) {
     let decode_frames_cmd_str = if cfg!(target_os = "windows") {
-        format!("ffmpeg.exe -y -i {video_filename} {video_frames_dir_name}/frame_%08d.png")
+        format!(r"ffmpeg\ffmpeg.exe -y -i {video_filename} {video_frames_dir_name}/frame_%08d.png")
     } else {
-        format!("ffmpeg -y -i {video_filename} {video_frames_dir_name}/frame_%08d.png")
+        format!(r"ffmpeg/ffmpeg -y -i {video_filename} {video_frames_dir_name}/frame_%08d.png")
     };
     println!("decode_frames_cmd_str: {decode_frames_cmd_str}");
 
@@ -59,9 +63,9 @@ fn get_origin_frame_count(video_frames_dir_name: &str) -> usize {
 
 fn get_origin_frame_rate(video_filename: &str) -> f32 {
     let ffprobe_cmd_str = if cfg!(target_os = "windows") {
-        format!("ffprobe.exe {video_filename}")
+        format!(r"ffmpeg\ffprobe.exe {video_filename}")
     } else {
-        format!("ffprobe {video_filename}")
+        format!(r"ffmpeg/ffprobe {video_filename}")
     };
     println!("ffprobe_cmd_str: {ffprobe_cmd_str}");
 
@@ -104,9 +108,13 @@ fn interpolate_frame(
     video_interpolate_frames_dir_name: &str,
 ) {
     let interpolate_frame_cmd_str = if cfg!(target_os = "windows") {
-        format!("rife-ncnn-vulkan/rife-ncnn-vulkan.exe -m rife-v4.6 -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}")
+        format!(
+            r"rife-ncnn-vulkan\rife-ncnn-vulkan.exe -m rife-v4.6 -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
+        )
     } else {
-        format!("rife-ncnn-vulkan/rife-ncnn-vulkan -m rife-v4.6 -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}")
+        format!(
+            r"rife-ncnn-vulkan/rife-ncnn-vulkan -m rife-v4.6 -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
+        )
     };
     println!("interpolate_frame_cmd_str: {interpolate_frame_cmd_str}");
 
@@ -120,9 +128,13 @@ fn encode_video(
     video_filename: &str,
 ) {
     let encode_video_cmd_str = if cfg!(target_os = "windows") {
-        format!("ffmpeg.exe -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p output_{video_filename}.mp4")
+        format!(
+            r"ffmpeg\ffmpeg.exe -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p output_{video_filename}.mp4"
+        )
     } else {
-        format!("ffmpeg -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p output_{video_filename}.mp4")
+        format!(
+            r"ffmpeg/ffmpeg -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p output_{video_filename}.mp4"
+        )
     };
     println!("encode_video_cmd_str: {encode_video_cmd_str}");
 
