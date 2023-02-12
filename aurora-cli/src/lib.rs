@@ -54,7 +54,7 @@ fn get_origin_frame_count(video_frames_dir_name: &str) -> usize {
     origin_frame_count
 }
 
-fn get_origin_frame_rate(video_filename: &str) -> usize {
+fn get_origin_frame_rate(video_filename: &str) -> f32 {
     let ffprobe_cmd_str = format!("ffprobe {video_filename}");
     println!("ffprobe_cmd_str: {ffprobe_cmd_str}");
 
@@ -73,7 +73,7 @@ fn get_origin_frame_rate(video_filename: &str) -> usize {
     let origin_frame_rate_str = re_cap.iter().nth(1).unwrap().unwrap().as_str();
     println!("origin_frame_rate_str: {origin_frame_rate_str}");
 
-    let origin_frame_rate = origin_frame_rate_str.parse::<usize>().unwrap();
+    let origin_frame_rate = origin_frame_rate_str.parse::<f32>().unwrap();
     println!("origin_frame_rate: {origin_frame_rate}");
     origin_frame_rate
 }
@@ -103,7 +103,7 @@ fn interpolate_frame(
 }
 
 fn encode_video(
-    target_frame_rate: usize,
+    target_frame_rate: f32,
     video_interpolate_frames_dir_name: &str,
     video_filename: &str,
 ) {
@@ -154,7 +154,7 @@ pub fn run(video_filename: &str, frame_multiple: usize) {
         &video_interpolate_frames_dir_name,
     );
 
-    let target_frame_rate = frame_multiple * origin_frame_rate;
+    let target_frame_rate = frame_multiple as f32 * origin_frame_rate;
     println!("target_frame_rate: {target_frame_rate}");
 
     encode_video(
