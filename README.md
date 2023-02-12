@@ -6,6 +6,11 @@ Video **Frame Interpolation** using machine learning.
 
 Free and **TRUE** open source.
 
+## Prerequired
+
+* Download [FFmpeg](https://ffmpeg.org/download.html) and add it to the `PATH` environment variable.
+* Download [rife-ncnn-vulkan release](https://github.com/nihui/rife-ncnn-vulkan/releases) according to your system, extract it, rename it to `rife-ncnn-vulkan`, and put it in the root directory of the project.
+
 ## Run
 
 ```bash

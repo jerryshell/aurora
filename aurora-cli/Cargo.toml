@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 regex = "1"
 dotenv = "0.15"
+glob = "0.3"
