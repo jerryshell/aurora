@@ -107,13 +107,19 @@ fn interpolate_frame(
     video_frames_dir_name: &str,
     video_interpolate_frames_dir_name: &str,
 ) {
+    let j = match std::env::var("J") {
+        Ok(str) => str,
+        Err(_) => "1:2:2".to_owned(),
+    };
+    println!("j: {j}");
+
     let interpolate_frame_cmd_str = if cfg!(target_os = "windows") {
         format!(
-            r"rife-ncnn-vulkan\rife-ncnn-vulkan.exe -m rife-v4.6 -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
+            r"rife-ncnn-vulkan\rife-ncnn-vulkan.exe -m rife-v4.6 -j {j} -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
         )
     } else {
         format!(
-            r"rife-ncnn-vulkan/rife-ncnn-vulkan -m rife-v4.6 -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
+            r"rife-ncnn-vulkan/rife-ncnn-vulkan -m rife-v4.6 -j {j} -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
         )
     };
     println!("interpolate_frame_cmd_str: {interpolate_frame_cmd_str}");
@@ -160,21 +166,29 @@ pub fn clean(
     );
 }
 
-pub fn run(video_filename: &str, frame_multiple: usize) {
+pub fn run(video_filename: &str, target_frame_rate: usize) {
     let video_extract_audio_filename = extract_audio(video_filename);
+    println!("video_extract_audio_filename: {video_extract_audio_filename}");
 
     let video_frames_dir_name = video_frames_dir_mkdir(video_filename);
+    println!("video_frames_dir_name: {video_frames_dir_name}");
 
     decode_frames(video_filename, &video_frames_dir_name);
 
     let origin_frame_count = get_origin_frame_count(&video_frames_dir_name);
+    println!("origin_frame_count: {origin_frame_count}");
 
     let origin_frame_rate = get_origin_frame_rate(video_filename);
+    println!("origin_frame_rate: {origin_frame_rate}");
+
+    let frame_multiple = (target_frame_rate as f32 / origin_frame_rate).ceil() as usize;
+    println!("frame_multiple: {frame_multiple}");
 
     let target_frame_count = frame_multiple * origin_frame_count;
     println!("target_frame_count: {target_frame_count}");
 
     let video_interpolate_frames_dir_name = video_interpolate_frames_dir_mkdir(video_filename);
+    println!("video_interpolate_frames_dir_name: {video_interpolate_frames_dir_name}");
 
     interpolate_frame(
         target_frame_count,
@@ -196,4 +210,24 @@ pub fn run(video_filename: &str, frame_multiple: usize) {
         &video_frames_dir_name,
         &video_interpolate_frames_dir_name,
     );
+}
+
+#[cfg(test)]
+mod tests {
+    mod j {
+        #[test]
+        fn test() {
+            dotenv::dotenv().ok();
+            let j = std::env::var("J").unwrap();
+            assert_eq!(j, "1:2:2");
+        }
+    }
+
+    mod ceil {
+        #[test]
+        fn test() {
+            assert_eq!(4.0f32.ceil(), 4.0);
+            assert_eq!(4.1f32.ceil(), 5.0);
+        }
+    }
 }

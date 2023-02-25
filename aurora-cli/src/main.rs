@@ -15,12 +15,12 @@ fn main() {
     for video_filename in path_list {
         println!("video_filename: {video_filename}");
 
-        let frame_multiple = match std::env::var("FRAME_MULTIPLE") {
-            Ok(str) => str.parse::<usize>().unwrap_or(2),
-            Err(_) => 2,
+        let target_frame_rate = match std::env::var("TARGET_FRAME_RATE") {
+            Ok(str) => str.parse::<usize>().unwrap_or(60),
+            Err(_) => 60,
         };
-        println!("frame_multiple: {frame_multiple}");
+        println!("target_frame_rate: {target_frame_rate}");
 
-        aurora_cli::run(&video_filename, frame_multiple);
+        aurora_cli::run(&video_filename, target_frame_rate);
     }
 }
