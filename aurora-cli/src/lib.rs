@@ -1,14 +1,20 @@
 fn execute_cmd(cmd: &str) -> std::process::Output {
     if cfg!(target_os = "windows") {
-        std::process::Command::new("cmd")
+        println!("windows execute_cmd: {cmd}");
+        let output = std::process::Command::new("cmd")
             .args(["/C", cmd])
             .output()
-            .expect("failed to execute process")
+            .expect("failed to execute process");
+        println!("windows exe ok");
+        output
     } else {
-        std::process::Command::new("sh")
+        println!("unix execute_cmd: {cmd}");
+        let output = std::process::Command::new("sh")
             .args(["-c", cmd])
             .output()
-            .expect("failed to execute process")
+            .expect("failed to execute process");
+        println!("unix exe ok");
+        output
     }
 }
 
@@ -137,13 +143,18 @@ fn encode_video(
     video_interpolate_frames_dir_name: &str,
     video_filename: &str,
 ) {
+    let video_encoder = match std::env::var("VIDEO_ENCODER") {
+        Ok(str) => str,
+        Err(_) => "libx264".to_owned(),
+    };
+    println!("video_encoder: {video_encoder}");
     let encode_video_cmd_str = if cfg!(target_os = "windows") {
         format!(
-            r"ffmpeg\ffmpeg.exe -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p output_{video_filename}.mp4"
+            r"ffmpeg\ffmpeg.exe -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v {video_encoder} -pix_fmt yuv420p output_{video_filename}.mp4"
         )
     } else {
         format!(
-            r"ffmpeg/ffmpeg -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p output_{video_filename}.mp4"
+            r"ffmpeg/ffmpeg -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v {video_encoder} -pix_fmt yuv420p output_{video_filename}.mp4"
         )
     };
     println!("encode_video_cmd_str: {encode_video_cmd_str}");
