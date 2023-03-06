@@ -112,15 +112,22 @@ fn video_interpolate_frames_dir_mkdir(video_filename: &str) -> String {
     video_interpolate_frames_dir_name
 }
 
+fn get_j() -> String {
+    match std::env::var("J") {
+        Ok(str) => str,
+        Err(_) => {
+            let cpus = num_cpus::get();
+            format!("{}:{}:{}", cpus, cpus, cpus)
+        }
+    }
+}
+
 fn interpolate_frame(
     target_frame_count: usize,
     video_frames_dir_name: &str,
     video_interpolate_frames_dir_name: &str,
 ) {
-    let j = match std::env::var("J") {
-        Ok(str) => str,
-        Err(_) => "1:2:2".to_owned(),
-    };
+    let j = get_j();
     println!("j: {j}");
 
     let interpolate_frame_cmd_str = if cfg!(target_os = "windows") {
