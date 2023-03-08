@@ -117,7 +117,7 @@ fn get_j() -> String {
         Ok(str) => str,
         Err(_) => {
             let cpus = num_cpus::get();
-            format!("{}:{}:{}", cpus, cpus, cpus)
+            format!("{}:{}:{}", (cpus - 1).max(1), (cpus - 1).max(2), 2)
         }
     }
 }
