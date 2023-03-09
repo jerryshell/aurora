@@ -8,8 +8,8 @@ pub fn decode_frames(video_filename: &str, video_frames_dir_name: &str) {
             r"ffmpeg/ffmpeg -y -vsync passthrough -i {video_filename} {video_frames_dir_name}/frame_%08d.png"
         )
     };
-    println!("decode_frames_cmd_str: {decode_frames_cmd_str}");
+    tracing::info!("decode_frames_cmd_str: {decode_frames_cmd_str}");
 
     let decode_frames_cmd_output = crate::execute_cmd(&decode_frames_cmd_str);
-    println!("decode_frames_cmd_output: {decode_frames_cmd_output:?}");
+    tracing::info!("decode_frames_cmd_output: {decode_frames_cmd_output:?}");
 }

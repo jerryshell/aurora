@@ -7,3 +7,5 @@ edition = "2021"
 aurora-core = { path = "../aurora-core" }
 dotenv = "0.15"
 glob = "0.3"
+tracing = "0.1"
+tracing-subscriber = "0.3"

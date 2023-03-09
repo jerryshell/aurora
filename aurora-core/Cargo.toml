@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 regex = "1.7"
 num_cpus = "1.15"
+tracing = "0.1"
