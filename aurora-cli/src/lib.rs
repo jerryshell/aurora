@@ -175,20 +175,34 @@ pub fn clean(
     video_frames_dir_name: &str,
     video_interpolate_frames_dir_name: &str,
 ) {
-    let remove_video_extract_audio_result = std::fs::remove_file(video_extract_audio_filename);
-    println!("remove_video_extract_audio_result: {remove_video_extract_audio_result:?}");
+    if !video_extract_audio_filename.is_empty() {
+        let remove_video_extract_audio_result = std::fs::remove_file(video_extract_audio_filename);
+        println!("remove_video_extract_audio_result: {remove_video_extract_audio_result:?}");
+    }
 
-    let remove_video_frames_dir_result = std::fs::remove_dir_all(video_frames_dir_name);
-    println!("remove_video_frames_dir_result: {remove_video_frames_dir_result:?}");
+    if !video_frames_dir_name.is_empty() {
+        let remove_video_frames_dir_result = std::fs::remove_dir_all(video_frames_dir_name);
+        println!("remove_video_frames_dir_result: {remove_video_frames_dir_result:?}");
+    }
 
-    let remove_video_interpolate_frames_dir_result =
-        std::fs::remove_dir_all(video_interpolate_frames_dir_name);
-    println!(
-        "remove_video_interpolate_frames_dir_result: {remove_video_interpolate_frames_dir_result:?}"
-    );
+    if !video_interpolate_frames_dir_name.is_empty() {
+        let remove_video_interpolate_frames_dir_result =
+            std::fs::remove_dir_all(video_interpolate_frames_dir_name);
+        println!("remove_video_interpolate_frames_dir_result: {remove_video_interpolate_frames_dir_result:?}");
+    }
 }
 
 pub fn run(video_filename: &str, target_frame_rate: usize) {
+    let origin_frame_rate = get_origin_frame_rate(video_filename);
+    println!("origin_frame_rate: {origin_frame_rate}");
+
+    let frame_multiple = (target_frame_rate as f32 / origin_frame_rate).ceil() as usize;
+    println!("frame_multiple: {frame_multiple}");
+    if frame_multiple <= 1 {
+        println!("frame_multiple <= 1, skip");
+        return;
+    }
+
     let video_extract_audio_filename = extract_audio(video_filename);
     println!("video_extract_audio_filename: {video_extract_audio_filename}");
 
@@ -199,12 +213,6 @@ pub fn run(video_filename: &str, target_frame_rate: usize) {
 
     let origin_frame_count = get_origin_frame_count(&video_frames_dir_name);
     println!("origin_frame_count: {origin_frame_count}");
-
-    let origin_frame_rate = get_origin_frame_rate(video_filename);
-    println!("origin_frame_rate: {origin_frame_rate}");
-
-    let frame_multiple = (target_frame_rate as f32 / origin_frame_rate).ceil() as usize;
-    println!("frame_multiple: {frame_multiple}");
 
     let target_frame_count = frame_multiple * origin_frame_count;
     println!("target_frame_count: {target_frame_count}");
