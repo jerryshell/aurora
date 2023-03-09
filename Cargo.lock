@@ -18,13 +18,13 @@ dependencies = [
  "aurora-core",
  "dotenv",
  "glob",
- "num_cpus",
 ]
 
 [[package]]
 name = "aurora-core"
 version = "0.1.0"
 dependencies = [
+ "num_cpus",
  "regex",
 ]
 

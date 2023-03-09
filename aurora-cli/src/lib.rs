@@ -2,7 +2,7 @@ fn get_j() -> String {
     match std::env::var("J") {
         Ok(str) => str,
         Err(_) => {
-            let cpus = num_cpus::get();
+            let cpus = aurora_core::get_cpus();
             format!("{}:{}:{}", (cpus - 1).max(1), (cpus - 1).max(2), 2)
         }
     }
