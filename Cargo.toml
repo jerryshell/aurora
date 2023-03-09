@@ -1,5 +1,5 @@
 [workspace]
-members = ['aurora-cli']
+members = ["aurora-cli", "aurora-core"]
 
 [profile.release]
 lto = true
