@@ -2,7 +2,7 @@
 
 Video **Frame Interpolation** using machine learning
 
-Free and **TRUE** open source
+Free and **TRUELY** open source
 
 ## 🚀 How to run
 

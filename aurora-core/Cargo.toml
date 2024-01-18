@@ -4,6 +4,6 @@ version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-regex = "1.8"
-num_cpus = "1.15"
-tracing = "0.1"
+regex = "*"
+num_cpus = "*"
+tracing = "*"
