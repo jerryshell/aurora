@@ -17,7 +17,7 @@ Video frame interpolation using machine learning
 ## 🔧 Fix: macOS cannot verify that this app is free from malware
 
 ```bash
-xattr -dr com.apple.quarantine rife-ncnn-vulkan
+xattr -dr com.apple.quarantine ffmpeg rife-ncnn-vulkan
 ```
 
 ## 📄 License
