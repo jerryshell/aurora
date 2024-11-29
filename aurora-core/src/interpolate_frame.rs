@@ -4,7 +4,7 @@ pub fn interpolate_frame(
     video_interpolate_frames_dir_name: &str,
     j: &str,
 ) {
-    let interpolate_frame_cmd_str = if cfg!(target_os = "windows") {
+    let interpolate_frame_cmd_str = if cfg!(windows) {
         format!(
             r"rife-ncnn-vulkan\rife-ncnn-vulkan.exe -m rife-v4.6 -j {j} -n {target_frame_count} -i {video_frames_dir_name} -o {video_interpolate_frames_dir_name}"
         )

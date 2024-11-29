@@ -1,13 +1,3 @@
-fn get_j() -> String {
-    match std::env::var("J") {
-        Ok(str) => str,
-        Err(_) => {
-            let cpus = aurora_core::get_cpus();
-            format!("{}:{}:{}", (cpus - 1).max(1), (cpus - 1).max(2), 2)
-        }
-    }
-}
-
 pub fn run(video_filename: &str, target_frame_rate: usize) {
     let origin_frame_rate = aurora_core::get_origin_frame_rate(video_filename);
     tracing::info!("origin_frame_rate: {origin_frame_rate}");
@@ -61,6 +51,10 @@ pub fn run(video_filename: &str, target_frame_rate: usize) {
         &video_frames_dir_name,
         &video_interpolate_frames_dir_name,
     );
+}
+
+fn get_j() -> String {
+    std::env::var("J").unwrap_or("1:2:2".to_owned())
 }
 
 #[cfg(test)]

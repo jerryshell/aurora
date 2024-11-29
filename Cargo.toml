@@ -5,3 +5,5 @@ members = ["aurora-cli", "aurora-core"]
 [profile.release]
 lto = true
 strip = true
+panic = "abort"
+codegen-units = 1

@@ -3,12 +3,10 @@ pub fn encode_video(
     video_interpolate_frames_dir_name: &str,
     video_filename: &str,
 ) {
-    let video_encoder = match std::env::var("VIDEO_ENCODER") {
-        Ok(str) => str,
-        Err(_) => "libx264".to_owned(),
-    };
+    let video_encoder = std::env::var("VIDEO_ENCODER").unwrap_or("libx264".to_owned());
     tracing::info!("video_encoder: {video_encoder}");
-    let encode_video_cmd_str = if cfg!(target_os = "windows") {
+
+    let encode_video_cmd_str = if cfg!(windows) {
         format!(
             r"ffmpeg\ffmpeg.exe -y -framerate {target_frame_rate} -i {video_interpolate_frames_dir_name}/%08d.png -i {video_filename}_audio.m4a -c:a copy -crf 20 -c:v {video_encoder} -pix_fmt yuv420p output_{video_filename}.mp4"
         )

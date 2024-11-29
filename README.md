@@ -1,12 +1,10 @@
 # Aurora
 
-Video **Frame Interpolation** using machine learning
+Video frame interpolation using machine learning
 
-Free and **TRUELY** open source
+## 🚀 How to use
 
-## 🚀 How to run
-
-1. Download [release](https://github.com/jerryshell/aurora/releases) according to your system
+1. Download from [release](https://github.com/jerryshell/aurora/releases) according to your system
 
 2. Edit `.env` file with your preferred text editor
 

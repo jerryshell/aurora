@@ -17,10 +17,10 @@ fn main() {
     for video_filename in path_list {
         tracing::info!("video_filename: {video_filename}");
 
-        let target_frame_rate = match std::env::var("TARGET_FRAME_RATE") {
-            Ok(str) => str.parse::<usize>().unwrap_or(60),
-            Err(_) => 60,
-        };
+        let target_frame_rate = std::env::var("TARGET_FRAME_RATE")
+            .ok()
+            .and_then(|s| s.parse::<usize>().ok())
+            .unwrap_or(60);
         tracing::info!("target_frame_rate: {target_frame_rate}");
 
         aurora_cli::run(&video_filename, target_frame_rate);

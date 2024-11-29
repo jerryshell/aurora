@@ -1,5 +1,5 @@
 pub fn get_origin_frame_rate(video_filename: &str) -> f32 {
-    let ffprobe_cmd_str = if cfg!(target_os = "windows") {
+    let ffprobe_cmd_str = if cfg!(windows) {
         format!(r"ffmpeg\ffprobe.exe {video_filename}")
     } else {
         format!(r"ffmpeg/ffprobe {video_filename}")
